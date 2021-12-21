@@ -1,0 +1,13 @@
+{
+  "name": "flight-booking-system",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "main": "./flight-service/app.js",
+  "scripts": {
+    "install": "npm run install:fe && npm run install:be",
+    "install:fe": "cd flight-frontend && npm install",
+    "install:be": "cd flight-service && npm install"
+  },
+  "license": "ISC"
+}
