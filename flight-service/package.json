@@ -11,7 +11,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "koa": "^2.13.4"
+    "koa": "^2.13.4",
+    "koa-body": "^4.2.0",
+    "koa-combine-routers": "^4.0.2",
+    "koa-compose": "^4.1.0",
+    "koa-router": "^10.1.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.12.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
