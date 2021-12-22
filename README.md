@@ -16,3 +16,4 @@
 ## How to develop locally?
 
 1. 安装依赖：`npm run install`
+2. dev：`npm run dev`
