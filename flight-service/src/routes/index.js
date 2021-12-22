@@ -1,3 +1,14 @@
+/**
+ * @openapi
+ * /:
+ *   get:
+ *     tags:
+ *      - test
+ *     description: test
+ *     responses:
+ *       200:
+ *         description: hello world!
+ */
 import Router from "koa-router"
 import combineRoutes from "koa-combine-routers"
 import admin from "./admin"
