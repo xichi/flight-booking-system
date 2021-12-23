@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
-import db from '../db/index';
+import mysql from '../db/mysql';
 
-const AdminModel = db.define('sys_admin',
+const AdminModel = mysql.define('sys_admin',
   {
     admin_id: {
       type: Sequelize.INTEGER,

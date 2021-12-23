@@ -16,4 +16,7 @@
 ## How to develop locally?
 
 1. 安装依赖：`npm run install`
-2. dev：`npm run dev`
+2. 启动本地前端项目：`npm run dev:fe`
+3. 启动本地后端项目：`npm run dev:be`
+
+接口文档：http://localhost:8000/swagger

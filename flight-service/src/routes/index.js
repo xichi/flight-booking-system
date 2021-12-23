@@ -8,10 +8,12 @@
  *     responses:
  *       200:
  *         description: hello world!
+ * 
  */
 import Router from "koa-router"
 import combineRoutes from "koa-combine-routers"
 import admin from "./admin"
+import user from "./user"
 
 const router = new Router()
 const index = router.get("/", ctx => {
@@ -20,5 +22,6 @@ const index = router.get("/", ctx => {
 
 export default combineRoutes(
   index,
-  admin
+  admin,
+  user
 )
