@@ -1,8 +1,8 @@
-<script setup>
+<script>
 </script>
 
 <template>
-  <router-view></router-view>
+  <p>user profile</p>
 </template>
 
 <style>

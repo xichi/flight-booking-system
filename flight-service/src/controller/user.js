@@ -147,6 +147,7 @@ class UserController {
   async getAllUser(ctx, next) {
     const token = ctx.request.header.authorization.slice(7);
     if (!checkAdminAuth(token)) {
+      ctx.status = 403;
       ctx.body = {
         success: false,
         message: '没有管理员权限'
