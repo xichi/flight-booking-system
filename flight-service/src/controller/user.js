@@ -143,6 +143,24 @@ class UserController {
     }
     next();
   }
+  // 获取用户信息
+  async getUserInfo(ctx, next) {
+    try {
+      const token = ctx.request.header.authorization.slice(7);
+      const { id } = jwt.verify(token, jwtSecret);
+      const user = await UserModel.findOne({ where: { user_id: id }});
+      ctx.body = {
+        success: true,
+        data: user
+      };
+    } catch (err) {
+      ctx.body = {
+        success: false,
+        message: '查询失败'
+      };
+    }
+    next();
+  }
   // 获取用户列表
   async getAllUser(ctx, next) {
     const token = ctx.request.header.authorization.slice(7);
@@ -168,6 +186,22 @@ class UserController {
     }
     next();
   }
+    // 获取用户权限
+    async checkAuth(ctx, next) {
+      const token = ctx.request.header.authorization.slice(7);
+      try {
+        ctx.body = {
+          success: true,
+          is_admin: checkAdminAuth(token) // 是否为管理员
+        };
+      } catch (err) {
+        ctx.body = {
+          success: false,
+          message: '获取用户权限失败'
+        };
+      }
+      next();
+    }
 }
 
 export default new UserController();

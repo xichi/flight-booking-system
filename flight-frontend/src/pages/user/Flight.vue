@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <p>user profile</p>
+  <p>user flight</p>
 </template>
 
 <style>

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { ElMessage } from 'element-plus'
+import store from "@/store";
 import 'element-plus/es/components/message/style/css'
 
-const token = JSON.parse(localStorage.getItem('token'));
+const token = localStorage.getItem('token') || store.token;
 const HTTP_ERROR = {
   '400': '浏览器发生错误',
   '401': '未知的用户身份',
@@ -52,7 +53,7 @@ export default {
     return new Promise((resolve, reject) => {
       axios({
         ...options,
-        url: `${import.meta.env.VITE_APP_SRC}/api/${url}`,
+        url: `${import.meta.env.VITE_APP_SRC}/api${url}`,
         method: method || 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

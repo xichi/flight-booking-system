@@ -1,5 +1,8 @@
+const token = localStorage.getItem('token');
+const username = localStorage.getItem('username');
 export default {
   store: {
-    username: '游客'
+    username: username || '游客',
+    token: token || '',
   }
 }

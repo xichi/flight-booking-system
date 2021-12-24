@@ -4,6 +4,7 @@ import {
   Ticket,
   Setting,
 } from '@element-plus/icons-vue'
+import { checkAuth } from '@/api/common'
 import { reactive } from 'vue'
 import store from '@/store'
 const sourceOfTruth = reactive(store)
@@ -16,6 +17,23 @@ export default {
     Ticket,
     Setting,
   },
+  methods: {
+    signout() {
+      this.store.token = '';
+      this.store.username = '';
+      localStorage.setItem('token', '');
+      localStorage.setItem('username', '');
+      this.$router.push('/login')
+    }
+  },
+  async mounted() {
+    if(this.store.token !== '') {
+      const { is_admin } = await checkAuth();
+      this.$router.push(`/${is_admin ? 'admin' : 'user'}/flight`)
+    } else {
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 
@@ -23,8 +41,9 @@ export default {
   <el-container>
     <el-aside width="200px">
       <div class="welcome-banner">
-        <p>亲爱的{{ store.username }}</p>
+        <p>亲爱的{{ store.username || '游客' }}</p>
         <p>欢迎使用民航订票系统！</p>
+        <el-button v-if="store.token" class="small" type="danger" @click="signout">退出登录</el-button>
       </div>
       <el-menu default-active="1" class="el-menu-vertical-demo">
         <el-menu-item index="1">
@@ -53,7 +72,7 @@ export default {
   </el-container>
 </template>
 
-<style scoped>
+<style lang="stylus" scoped>
 .el-header,
 .el-footer {
   background-color: #b3c0d1;
@@ -74,5 +93,9 @@ export default {
   color: var(--el-text-color-primary);
   text-align: center;
   line-height: 160px;
+}
+
+.welcome-banner {
+  margin-bottom 50px
 }
 </style>

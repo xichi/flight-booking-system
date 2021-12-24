@@ -1,6 +1,6 @@
 <script>
 import { reactive } from 'vue'
-import { adminLogin } from '@/api/common'
+import { adminLogin, checkAuth } from '@/api/common'
 import store from '@/store'
 const sourceOfTruth = reactive(store)
 export default {
@@ -17,17 +17,29 @@ export default {
   },
   methods: {
     async login() {
-      const { success } = await adminLogin(this.username, this.passwd);
+      const { success, token } = await adminLogin(this.username, this.passwd);
       if (success) {
+        this.store.token = token;
         this.store.username = this.username;
-        this.$router.push('/admin/profile');
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', this.username);
+        this.$router.push(`/${this.isAdmin ? 'admin' : 'user'}/flight`)
       }
     },
     async register() {
 
     },
     clearup() {
-
+      this.username = '';
+      this.passwd = '';
+      this.checkPasswd = '';
+      this.email = '';
+    }
+  },
+  async mounted() {
+    if (this.store.token !== '') {
+      const { is_admin } = await checkAuth();
+      this.$router.push(`/${is_admin ? 'admin' : 'user'}/flight`)
     }
   }
 }
@@ -37,7 +49,7 @@ export default {
   <div class="login-container">
     <el-card class="box-card">
       <div class="box-card__header">
-        <el-radio-group v-model="isLogin" style="margin-bottom: 20px">
+        <el-radio-group v-model="isLogin" @change="clearup" style="margin-bottom: 20px">
           <el-radio-button :label="true">登录 login</el-radio-button>
           <el-radio-button :label="false">注册 Register</el-radio-button>
         </el-radio-group>

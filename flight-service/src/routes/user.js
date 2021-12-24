@@ -187,6 +187,8 @@ router.post("/user/login", UserController.login)
 router.post("/user/register", UserController.register)
 router.post("/user/signout", UserController.signout)
 router.get("/user/getAllUser", UserController.getAllUser)
+router.get("/user/getUserInfo", UserController.getUserInfo)
 router.post("/user/updateInfo", UserController.updateInfo)
+router.get("/user/checkAuth", UserController.checkAuth)
 
 export default router
