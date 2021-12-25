@@ -104,7 +104,7 @@ export default {
 .el-aside {
   background-color: #d3dce6;
   color: var(--el-text-color-primary);
-  height: 100vh;
+  min-height: 100vh;
   text-align: center;
 }
 
