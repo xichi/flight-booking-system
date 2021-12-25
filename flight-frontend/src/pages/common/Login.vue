@@ -1,6 +1,6 @@
 <script>
 import { reactive } from 'vue'
-import { adminLogin, register, checkAuth } from '@/api/common'
+import { adminLogin, userLogin, register, checkAuth } from '@/api/common'
 import store from '@/store'
 const sourceOfTruth = reactive(store)
 export default {
@@ -17,7 +17,13 @@ export default {
   },
   methods: {
     async login() {
-      const { success, token } = await adminLogin(this.username, this.passwd);
+      let data = {};
+      if (this.isAdmin) {
+        data = await adminLogin(this.username, this.passwd);
+      } else {
+        data = await userLogin(this.username, this.passwd);
+      }
+      const { success, token } = data;
       if (success) {
         this.store.token = token;
         this.store.username = this.username;

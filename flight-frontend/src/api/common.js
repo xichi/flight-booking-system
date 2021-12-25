@@ -10,6 +10,16 @@ export const adminLogin = (username, passwd) => {
   });
 };
 
+export const userLogin = (username, passwd) => {
+  return request.post({
+    url: "/user/login",
+    data: {
+      username,
+      passwd,
+    },
+  });
+};
+
 export const getAllAdmin = (username, passwd) => {
   return request.get({
     url: "/admin/getAllAdmin",
@@ -51,26 +61,9 @@ export const getUserInfo = () => {
 };
 
 // 修改用户信息
-
-export const updateUserInfo = ({
-  certification_type,
-  certification_number,
-  telephone,
-  sex,
-  age,
-  balance,
-  address,
-} = {}) => {
+export const updateUserInfo = (param = {}) => {
   return request.post({
-    url: "/user/getUserInfo",
-    data: {
-      certification_type,
-      certification_number,
-      telephone,
-      sex,
-      age,
-      balance,
-      address,
-    },
+    url: "/user/updateinfo",
+    data: param,
   });
 };

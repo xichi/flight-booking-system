@@ -3,7 +3,6 @@ import store from "@/store";
 import { ElMessage } from 'element-plus'
 import 'element-plus/es/components/message/style/css'
 
-const token = localStorage.getItem('token') || store.token;
 const HTTP_ERROR = {
   '400': '浏览器发生错误',
   '401': '未知的用户身份',
@@ -50,6 +49,7 @@ function checkHttpStatus(res, resolve, reject) {
 export default {
   request(options, method) {
     const url = options.url || '';
+    const token = localStorage.getItem('token') || store.token;
     return new Promise((resolve, reject) => {
       axios({
         ...options,
