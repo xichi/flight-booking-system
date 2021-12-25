@@ -10,7 +10,10 @@ import store from '@/store'
 const sourceOfTruth = reactive(store)
 export default {
   data() {
-    return sourceOfTruth
+    return {
+      currentIndex: 'flight',
+      ...sourceOfTruth
+    }
   },
   components: {
     Location,
@@ -24,16 +27,33 @@ export default {
       localStorage.setItem('token', '');
       localStorage.setItem('username', '');
       this.$router.push('/login')
-    }
+    },
+    async changeRouter(route) {
+      if (this.store.token !== '') {
+        const { is_admin } = await checkAuth();
+        this.store.is_admin = is_admin
+        this.$router.push(`/${is_admin ? 'admin' : 'user'}/${route}`)
+      } else {
+        this.$message({
+          message: '请先登录',
+          type: 'error',
+        });
+        this.$router.push('/login')
+      }
+    },
   },
   async mounted() {
-    if(this.store.token !== '') {
+    let path = this.$route.path.match(/\/\w*$/g)[0];
+    path = path === '/' ? '/flight' : path;
+    this.currentIndex = path.slice(1);
+    if (this.store.token !== '') {
       const { is_admin } = await checkAuth();
-      this.$router.push(`/${is_admin ? 'admin' : 'user'}/flight`)
+      this.store.is_admin = is_admin
+      this.$router.push(`/${is_admin ? 'admin' : 'user'}${path}`)
     } else {
       this.$router.push('/login')
     }
-  }
+  },
 }
 </script>
 
@@ -45,20 +65,20 @@ export default {
         <p>欢迎使用民航订票系统！</p>
         <el-button v-if="store.token" class="small" type="danger" @click="signout">退出登录</el-button>
       </div>
-      <el-menu default-active="1" class="el-menu-vertical-demo">
-        <el-menu-item index="1">
+      <el-menu :default-active="currentIndex" class="el-menu-vertical-demo">
+        <el-menu-item index="flight" @click="() => changeRouter('flight')">
           <el-icon>
             <Location />
           </el-icon>
           <span>航班信息</span>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item index="order" @click="() => changeRouter('order')">
           <el-icon>
             <Ticket />
           </el-icon>
           <span>订单信息</span>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="profile" @click="() => changeRouter('profile')">
           <el-icon>
             <Setting />
           </el-icon>

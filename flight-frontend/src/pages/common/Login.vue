@@ -1,6 +1,6 @@
 <script>
 import { reactive } from 'vue'
-import { adminLogin, checkAuth } from '@/api/common'
+import { adminLogin, register, checkAuth } from '@/api/common'
 import store from '@/store'
 const sourceOfTruth = reactive(store)
 export default {
@@ -27,7 +27,21 @@ export default {
       }
     },
     async register() {
-
+      if (this.passwd !== this.checkPasswd) {
+        this.$message({
+          message: '两次密码不一致',
+          type: 'error',
+        })
+        return;
+      }
+      const { success, token } = await register(this.username, this.email, this.passwd, this.checkPasswd);
+      if (success) {
+        this.store.token = token;
+        this.store.username = this.username;
+        localStorage.setItem('token', token);
+        localStorage.setItem('username', this.username);
+        this.$router.push('/user/flight')
+      }
     },
     clearup() {
       this.username = '';
@@ -95,7 +109,7 @@ export default {
   </div>
 </template>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .login-container
   width 100%
   height 100%

@@ -1,6 +1,6 @@
 import axios from "axios";
-import { ElMessage } from 'element-plus'
 import store from "@/store";
+import { ElMessage } from 'element-plus'
 import 'element-plus/es/components/message/style/css'
 
 const token = localStorage.getItem('token') || store.token;

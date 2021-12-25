@@ -5,6 +5,8 @@ import AdminProfile from "@/pages/admin/Profile.vue"
 import UserProfile from "@/pages/user/Profile.vue"
 import AdminFlight from "@/pages/admin/Flight.vue"
 import UserFlight from "@/pages/user/Flight.vue"
+import AdminOrder from "@/pages/admin/Order.vue"
+import UserOrder from "@/pages/user/Order.vue"
 
 const routes = [
   {
@@ -23,6 +25,12 @@ const routes = [
       },
       {
         path: "/user/flight", component: UserFlight
+      },
+      {
+        path: "/admin/order", component: AdminOrder
+      },
+      {
+        path: "/user/order", component: UserOrder
       }
     ]
   }
