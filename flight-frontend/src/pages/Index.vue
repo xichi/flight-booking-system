@@ -4,7 +4,7 @@ import {
   Ticket,
   Setting,
 } from '@element-plus/icons-vue'
-import { checkAuth } from '@/api/common'
+import { checkAuth, signout } from '@/api/common'
 import { reactive } from 'vue'
 import store from '@/store'
 const sourceOfTruth = reactive(store)
@@ -21,12 +21,15 @@ export default {
     Setting,
   },
   methods: {
-    signout() {
-      this.store.token = '';
-      this.store.username = '';
-      localStorage.setItem('token', '');
-      localStorage.setItem('username', '');
-      this.$router.push('/login')
+    async signout() {
+      const { success } = await signout();
+      if (success) {
+        this.store.token = '';
+        this.store.username = '';
+        localStorage.setItem('token', '');
+        localStorage.setItem('username', '');
+        this.$router.push('/login')
+      }
     },
     async changeRouter(route) {
       if (this.store.token !== '') {
@@ -41,11 +44,15 @@ export default {
         this.$router.push('/login')
       }
     },
+    watchRouteChange(route) {
+      let path = route.match(/\/\w*$/g)[0];
+      path = path === '/' ? '/flight' : path;
+      this.currentIndex = path.slice(1);
+      return path;
+    }
   },
   async mounted() {
-    let path = this.$route.path.match(/\/\w*$/g)[0];
-    path = path === '/' ? '/flight' : path;
-    this.currentIndex = path.slice(1);
+    const path = this.watchRouteChange(this.$route.path);
     if (this.store.token !== '') {
       const { is_admin } = await checkAuth();
       this.store.is_admin = is_admin
@@ -53,6 +60,9 @@ export default {
     } else {
       this.$router.push('/login')
     }
+  },
+  async beforeRouteUpdate(to, from) {
+    this.watchRouteChange(to.path);
   },
 }
 </script>

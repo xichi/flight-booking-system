@@ -59,8 +59,8 @@ export default {
         to_airport: '大兴国际机场',
         depature_time: '13: 00',
         arrival_time: '15: 00',
-        original_price: 349,
-        current_price: 1280,
+        original_price: 1280,
+        current_price: 349,
         grade: '经济舱',
         remain_seats: 5,
       }, {
@@ -72,8 +72,8 @@ export default {
         to_airport: '首都国际机场T3',
         depature_time: '14: 00',
         arrival_time: '18: 00',
-        original_price: 600,
-        current_price: 1580,
+        original_price: 1580,
+        current_price: 400,
         grade: '经济舱',
         remain_seats: 5,
       }]
