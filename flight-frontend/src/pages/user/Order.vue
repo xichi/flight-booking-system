@@ -1,5 +1,6 @@
 <script>
 import { Right } from '@element-plus/icons-vue'
+import { ORDER_LIST } from '@/mock'
 export default {
   data() {
     return {
@@ -10,36 +11,7 @@ export default {
     Right
   },
   async mounted() {
-    this.orderList = [{
-      flight_id: 0,
-      flight_model: '国泰航空',
-      from_city: '南京',
-      to_city: '北京',
-      from_airport: '禄口国际机场T2',
-      to_airport: '大兴国际机场',
-      depature_time: '13: 00',
-      arrival_time: '15: 00',
-      order_time: '2021/12/31',
-      grade: '经济舱',
-      status: '待出行',
-      order_price: 349,
-      remain_seats: 5,
-    }, {
-      flight_id: 1,
-      flight_model: '国泰航空',
-      from_city: '南京',
-      to_city: '北京',
-      from_airport: '禄口国际机场T2',
-      to_airport: '首都国际机场T3',
-      grade: '经济舱',
-      depature_time: '14: 00',
-      arrival_time: '18: 00',
-      order_time: '2021/12/31',
-      grade: '经济舱',
-      status: '已完成',
-      order_price: 600,
-      remain_seats: 5,
-    }];
+    this.orderList = ORDER_LIST;
   },
   methods: {
   }
@@ -72,7 +44,6 @@ export default {
             </div>
             <div class="flight-item__right">
               <div class="price">￥{{ item.order_price }}</div>
-              <div class="grade">{{ item.grade }}</div>
             </div>
             <el-button :type="item.status === '待出行' ? 'success' : 'info'" round>{{ item.status }}</el-button>
           </div>

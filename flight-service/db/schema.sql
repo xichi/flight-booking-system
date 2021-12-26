@@ -47,15 +47,9 @@ CREATE TABLE flight (
   to_airport varchar(64) NOT NULL,
   departure_time timestamp,
   arrival_time timestamp,
-  first_class_original_price int NOT NULL,
-  first_class_current_price int NOT NULL,
-  first_class_remain_seats int NOT NULL,
-  business_class_original_price int NOT NULL,
-  business_class_current_price int NOT NULL,
-  business_class_remain_seats int NOT NULL,
-  economy_class_original_price int NOT NULL,
-  economy_class_current_price int NOT NULL,
-  economy_class_remain_seats int NOT NULL,
+  original_price int NOT NULL,
+  current_price int NOT NULL,
+  remain_seats int NOT NULL,
   PRIMARY KEY (flight_id)
 );
 
@@ -68,7 +62,6 @@ CREATE TABLE order_record (
   order_time timestamp,
   order_price int NOT NULL,
   check_status int NOT NULL DEFAULT 0,
-  grade int NOT NULL DEFAULT 0,
   PRIMARY KEY (order_id),
   FOREIGN KEY (user_id) REFERENCES sys_user(user_id),
   FOREIGN KEY (flight_id) REFERENCES flight(flight_id)

@@ -5,6 +5,7 @@ import {
 } from '@element-plus/icons-vue'
 import { reactive } from 'vue'
 import store from '@/store'
+import { FLIGHT_LIST } from '@/mock'
 const sourceOfTruth = reactive(store)
 export default {
   data() {
@@ -15,20 +16,6 @@ export default {
       airplaneClass: 0,
       flightList: [],
       isSearched: false,
-      airplaneOption: [
-        {
-          value: 0,
-          label: '头等舱',
-        },
-        {
-          value: 1,
-          label: '商务舱',
-        },
-        {
-          value: 2,
-          label: '经济舱',
-        },
-      ],
       ratate: 0,
       ...sourceOfTruth
     }
@@ -50,33 +37,7 @@ export default {
     async searchFlight() {
       // TODO: 如果用户未完善信息，要求他们先完善信息
       this.isSearched = true;
-      this.flightList = [{
-        flight_id: 0,
-        flight_model: '国泰航空',
-        from_city: '南京',
-        to_city: '北京',
-        from_airport: '禄口国际机场T2',
-        to_airport: '大兴国际机场',
-        depature_time: '13: 00',
-        arrival_time: '15: 00',
-        original_price: 1280,
-        current_price: 349,
-        grade: '经济舱',
-        remain_seats: 5,
-      }, {
-        flight_id: 1,
-        flight_model: '国泰航空',
-        from_city: '南京',
-        to_city: '北京',
-        from_airport: '禄口国际机场T2',
-        to_airport: '首都国际机场T3',
-        depature_time: '14: 00',
-        arrival_time: '18: 00',
-        original_price: 1580,
-        current_price: 400,
-        grade: '经济舱',
-        remain_seats: 5,
-      }]
+      this.flightList = FLIGHT_LIST;
     },
     async buyTicket() {
       this.$message({
@@ -114,16 +75,6 @@ export default {
         <el-form-item label="出发日期" required>
           <el-date-picker v-model="date" type="date"></el-date-picker>
         </el-form-item>
-        <el-form-item label="经济/公务/头等舱" required>
-          <el-select v-model="airplaneClass" placeholder="经济/公务/头等舱">
-            <el-option
-              v-for="item in airplaneOption"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="出行人" required>
           <el-input v-model="store.username" disabled></el-input>
         </el-form-item>
@@ -156,7 +107,7 @@ export default {
                 <div class="current_price">￥{{ item.current_price }}</div>
                 <div class="original_price">￥{{ item.original_price }}</div>
               </div>
-              <div class="seats">{{ item.grade }}还剩 {{ item.remain_seats }} 个座位</div>
+              <div class="seats">还剩 {{ item.remain_seats }} 个座位</div>
             </div>
             <div>
               <el-button type="danger" @click="buyTicket">订票</el-button>
