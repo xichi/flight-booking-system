@@ -2,6 +2,7 @@ import "date-utils";
 import Sequelize from "sequelize";
 import FlightModel from "../models/flight";
 import OrderModel from "../models/order";
+import UserModel from "../models/user";
 import { checkAdminAuth } from "../middlewares/check";
 
 const Op = Sequelize.Op;
@@ -49,6 +50,22 @@ class FlightController {
       const { remain_seats } = await FlightModel.findOne({
         where: { flight_id },
       });
+      if(remain_seats <= 0) {
+        ctx.body = {
+          success: false,
+          message: "机票已卖完",
+        };
+        return;
+      }
+      const user = await UserModel.findOne({ where: { user_id }});
+      const isNotComplete = Object.entries(user.dataValues).some(item => item[1] === null);
+      if(isNotComplete) {
+        ctx.body = {
+          success: false,
+          message: "请先去用户中心完善信息再订票~",
+        };
+        return;
+      }
       const order = await OrderModel.create({
         user_id,
         flight_id,
