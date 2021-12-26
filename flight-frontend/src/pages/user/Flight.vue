@@ -4,15 +4,16 @@ import {
   Right
 } from '@element-plus/icons-vue'
 import { reactive } from 'vue'
+import { startOfToday, format } from 'date-fns'
 import store from '@/store'
-import { FLIGHT_LIST } from '@/mock'
+import { queryFlight, buyTicket } from '@/api/common'
 const sourceOfTruth = reactive(store)
 export default {
   data() {
     return {
       fromCity: '南京',
       toCity: '北京',
-      date: new Date(),
+      date: startOfToday(),
       airplaneClass: 0,
       flightList: [],
       isSearched: false,
@@ -35,16 +36,27 @@ export default {
       this.ratate = this.ratate + 180;
     },
     async searchFlight() {
-      // TODO: 如果用户未完善信息，要求他们先完善信息
       this.isSearched = true;
-      this.flightList = FLIGHT_LIST;
+      const { success, data } = await queryFlight(this.fromCity, this.toCity, this.date);
+      if (success) {
+        const { count, result } = data;
+        this.flightList = result.map(item => ({
+          ...item,
+          date: format(new Date(item.departure_time), 'yyyy-mm-dd'),
+          departure_time: format(new Date(item.departure_time), 'HH:mm'),
+          arrival_time: format(new Date(item.arrival_time), 'HH:mm')
+        }))
+      }
     },
-    async buyTicket() {
-      this.$message({
-        message: '购买成功',
-        type: 'success'
-      })
-      this.$router.push('/user/order')
+    async handleBuyTicket({ flight_id, order_price }) {
+      const { success, data } = await buyTicket(flight_id, order_price);
+      if (success) {
+        this.$message({
+          message: '购买成功',
+          type: 'success'
+        })
+        this.$router.push('/user/order')
+      }
     }
   }
 }
@@ -84,14 +96,17 @@ export default {
       </el-form>
     </el-card>
     <el-card v-if="isSearched" class="box-card box-card__bottom">
-      <p>{{fromCity}} 到 {{toCity}} 查询结果:</p>
+      <p>{{ fromCity }} 到 {{ toCity }} 查询结果:</p>
       <div v-if="flightList.length > 0">
         <div v-for="(item, index) in flightList" :key="index">
           <div class="flight-item__container">
-            <div class="flight-item__left">{{ item.flight_model }}</div>
+            <div class="flight-item__left">
+              <div class="date">{{ item.date }}</div>
+              <div class="model">{{ item.flight_model }}</div>
+            </div>
             <div class="flight-item__middle">
               <div>
-                <div class="time">{{ item.depature_time }}</div>
+                <div class="time">{{ item.departure_time }}</div>
                 <div class="airport">{{ item.from_airport }}</div>
               </div>
               <el-icon color="#409eff" :style="{ fontSize: '30px' }">
@@ -110,7 +125,10 @@ export default {
               <div class="seats">还剩 {{ item.remain_seats }} 个座位</div>
             </div>
             <div>
-              <el-button type="danger" @click="buyTicket">订票</el-button>
+              <el-button
+                type="danger"
+                @click="() => handleBuyTicket({ flight_id: item.flight_id, order_price: item.current_price })"
+              >订票</el-button>
             </div>
           </div>
           <el-divider border-style="dashed"></el-divider>

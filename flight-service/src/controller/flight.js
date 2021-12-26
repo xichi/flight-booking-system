@@ -3,7 +3,7 @@ import Sequelize from "sequelize";
 import FlightModel from "../models/flight";
 import OrderModel from "../models/order";
 import UserModel from "../models/user";
-import { checkAdminAuth } from "../middlewares/check";
+import { checkAdminAuth, verifyToken } from "../middlewares/check";
 
 const Op = Sequelize.Op;
 class FlightController {
@@ -46,7 +46,8 @@ class FlightController {
   // 购票
   async buyTicket(ctx, next) {
     try {
-      const { flight_id, user_id, order_price } = ctx.request.body;
+      const { flight_id, order_price } = ctx.request.body;
+      const { id: user_id } = verifyToken(ctx);
       const { remain_seats } = await FlightModel.findOne({
         where: { flight_id },
       });
@@ -106,7 +107,7 @@ class FlightController {
           message: "没有管理员权限",
         };
       } else {
-        const flight = await FlightModel.findAll({ where: { flight_id } });
+        const flight = await FlightModel.findAll();
         ctx.body = {
           success: true,
           data: flight,

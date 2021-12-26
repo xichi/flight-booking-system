@@ -1,6 +1,7 @@
 <script>
 import { Right } from '@element-plus/icons-vue'
-import { FLIGHT_LIST_LARGE } from '@/mock'
+import { getAllFlight } from '@/api/common'
+import format from 'date-fns/format'
 export default {
   data() {
     return {
@@ -35,7 +36,14 @@ export default {
     }
   },
   async mounted() {
-    this.flightList = FLIGHT_LIST_LARGE;
+    const { success, data } = await getAllFlight();
+    if (success) {
+      this.flightList = data.map(item => ({
+        ...item,
+        departure_time: format(new Date(item.departure_time), 'yyyy-MM-dd HH:mm'),
+        arrival_time: format(new Date(item.arrival_time), 'yyyy-MM-dd HH:mm')
+      }))
+    }
   }
 }
 </script>

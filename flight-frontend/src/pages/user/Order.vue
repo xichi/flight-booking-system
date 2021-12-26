@@ -1,6 +1,7 @@
 <script>
 import { Right } from '@element-plus/icons-vue'
-import { ORDER_LIST } from '@/mock'
+import { format } from 'date-fns'
+import { getMyOrder } from '@/api/common'
 export default {
   data() {
     return {
@@ -11,7 +12,20 @@ export default {
     Right
   },
   async mounted() {
-    this.orderList = ORDER_LIST;
+    const { success, data } = await getMyOrder();
+    if (success) {
+      this.orderList = data.result.map(item => ({
+        ...item,
+        flight_model: item.flight.flight_model,
+        from_airport: item.flight.from_airport,
+        to_airport: item.flight.to_airport,
+        status: item.check_status,
+        date: format(new Date(item.flight.departure_time), 'yyyy-mm-dd'),
+        departure_time: format(new Date(item.flight.departure_time), 'HH:mm'),
+        arrival_time: format(new Date(item.flight.arrival_time), 'HH:mm'),
+        order_time: format(new Date(item.order_time), 'yyyy-mm-dd HH:mm'),
+      }));
+    }
   },
   methods: {
   }
@@ -26,12 +40,12 @@ export default {
         <div v-for="(item, index) in orderList" :key="index">
           <div class="flight-item__container">
             <div class="flight-item__left">
-              <div class="time">{{ item.order_time }}</div>
+              <div class="time">{{ item.date }}</div>
               <div class="model">{{ item.flight_model }}</div>
             </div>
             <div class="flight-item__middle">
               <div>
-                <div class="time">{{ item.depature_time }}</div>
+                <div class="time">{{ item.departure_time }}</div>
                 <div class="airport">{{ item.from_airport }}</div>
               </div>
               <el-icon color="#409eff" :style="{ fontSize: '30px' }">
@@ -44,8 +58,12 @@ export default {
             </div>
             <div class="flight-item__right">
               <div class="price">￥{{ item.order_price }}</div>
+              <div class="time">{{ item.order_time }} 下单</div>
             </div>
-            <el-button :type="item.status === '待出行' ? 'success' : 'info'" round>{{ item.status }}</el-button>
+            <el-button
+              :type="item.status === 0 ? 'success' : 'info'"
+              round
+            >{{ item.status === 0 ? '待出行' : '已完成' }}</el-button>
           </div>
           <el-divider border-style="dashed"></el-divider>
         </div>
@@ -93,6 +111,9 @@ export default {
           line-height 30px
           font-weight bold
           color #F56C6C
+        .time
+          font-size 12px
+          color #909399
 
 </style>
 

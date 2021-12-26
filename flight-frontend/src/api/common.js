@@ -61,9 +61,58 @@ export const getUserInfo = () => {
 };
 
 // 修改用户信息
-export const updateUserInfo = (param = {}) => {
+export const updateUserInfo = (params = {}) => {
   return request.post({
     url: "/user/updateinfo",
-    data: param,
+    data: params,
+  });
+};
+
+// 查询航班
+export const queryFlight = (from_city, to_city, departure_date) => {
+  return request.get({
+    url: `/flight/getOnes?from_city=${from_city}&to_city=${to_city}&departure_date=${departure_date}`,
+  });
+};
+
+export const getAllFlight = () => {
+  return request.get({
+    url: "/flight/getAll",
+  });
+};
+
+export const addFlight = (params = {}) => {
+  return request.post({
+    url: "/flight/addOne",
+    data: params,
+  });
+};
+
+export const updateFlight = (params = {}) => {
+  return request.post({
+    url: "/flight/updateOne",
+    data: params,
+  });
+};
+
+export const buyTicket = (flight_id, order_price) => {
+  return request.post({
+    url: "/flight/buyTicket",
+    data: {
+      flight_id,
+      order_price,
+    },
+  });
+};
+
+export const getAllOrder = () => {
+  return request.get({
+    url: "/order/getAll",
+  });
+};
+
+export const getMyOrder = () => {
+  return request.get({
+    url: "/order/getMine",
   });
 };
