@@ -14,7 +14,7 @@ export default {
         to_city: "北京",
         from_airport: "禄口国际机场T2",
         to_airport: "大兴国际机场",
-        depature_time: new Date(),
+        departure_time: new Date(),
         arrival_time: new Date(),
         original_price: 1280,
         current_price: 349,
@@ -50,7 +50,7 @@ export default {
         <el-table-column prop="to_city" label="目的地城市" width="120" />
         <el-table-column prop="from_airport" label="出发机场" width="120" />
         <el-table-column prop="to_airport" label="目的地机场" width="120" />
-        <el-table-column prop="depature_time" label="出发时间" width="120" />
+        <el-table-column prop="departure_time" label="出发时间" width="120" />
         <el-table-column prop="arrival_time" label="抵达时间" width="120" />
         <el-table-column prop="remain_seats" label="剩余座位" width="120" />
         <el-table-column prop="original_price" label="原价" width="120" />
@@ -108,7 +108,7 @@ export default {
           <el-row>
             <el-col :span="11">
               <el-date-picker
-                v-model="flightRecord.depature_time"
+                v-model="flightRecord.departure_time"
                 type="datetime"
                 placeholder="出发时间"
                 style="width: 100%"

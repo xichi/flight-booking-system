@@ -163,8 +163,7 @@ class UserController {
   }
   // 获取用户列表
   async getAllUser(ctx, next) {
-    const token = ctx.request.header.authorization.slice(7);
-    if (!checkAdminAuth(token)) {
+    if (!checkAdminAuth(ctx)) {
       ctx.status = 403;
       ctx.body = {
         success: false,
@@ -188,11 +187,10 @@ class UserController {
   }
     // 获取用户权限
     async checkAuth(ctx, next) {
-      const token = ctx.request.header.authorization.slice(7);
       try {
         ctx.body = {
           success: true,
-          is_admin: checkAdminAuth(token) // 是否为管理员
+          is_admin: checkAdminAuth(ctx) // 是否为管理员
         };
       } catch (err) {
         ctx.body = {
