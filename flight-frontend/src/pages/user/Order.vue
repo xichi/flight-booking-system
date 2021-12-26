@@ -20,10 +20,10 @@ export default {
         from_airport: item.flight.from_airport,
         to_airport: item.flight.to_airport,
         status: item.check_status,
-        date: format(new Date(item.flight.departure_time), 'yyyy-mm-dd'),
+        date: format(new Date(item.flight.departure_time), 'yyyy-MM-dd'),
         departure_time: format(new Date(item.flight.departure_time), 'HH:mm'),
         arrival_time: format(new Date(item.flight.arrival_time), 'HH:mm'),
-        order_time: format(new Date(item.order_time), 'yyyy-mm-dd HH:mm'),
+        order_time: format(new Date(item.order_time), 'yyyy-MM-dd HH:mm'),
       }));
     }
   },

@@ -42,7 +42,7 @@ export default {
         const { count, result } = data;
         this.flightList = result.map(item => ({
           ...item,
-          date: format(new Date(item.departure_time), 'yyyy-mm-dd'),
+          date: format(new Date(item.departure_time), 'yyyy-MM-dd'),
           departure_time: format(new Date(item.departure_time), 'HH:mm'),
           arrival_time: format(new Date(item.arrival_time), 'HH:mm')
         }))
