@@ -17,6 +17,8 @@ export default {
       this.orderList = data.result.map(item => ({
         ...item,
         flight_model: item.flight.flight_model,
+        from_city: item.flight.from_city,
+        to_city: item.flight.to_city,
         from_airport: item.flight.from_airport,
         to_airport: item.flight.to_airport,
         status: item.check_status,
@@ -46,14 +48,14 @@ export default {
             <div class="flight-item__middle">
               <div>
                 <div class="time">{{ item.departure_time }}</div>
-                <div class="airport">{{ item.from_airport }}</div>
+                <div class="airport">{{ item.from_city }}-{{ item.from_airport }}</div>
               </div>
               <el-icon color="#409eff" :style="{ fontSize: '30px' }">
                 <Right />
               </el-icon>
               <div>
                 <div class="time">{{ item.arrival_time }}</div>
-                <div class="airport">{{ item.to_airport }}</div>
+                <div class="airport">{{ item.to_city }}-{{ item.to_airport }}</div>
               </div>
             </div>
             <div class="flight-item__right">

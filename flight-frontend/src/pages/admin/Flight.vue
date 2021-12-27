@@ -1,49 +1,78 @@
 <script>
 import { Right } from '@element-plus/icons-vue'
-import { getAllFlight } from '@/api/common'
+import { getAllFlight, updateFlight, addFlight } from '@/api/common'
 import format from 'date-fns/format'
+const defaultFlightRecord = {
+  flight_id: 0,
+  flight_model: "",
+  from_city: "",
+  to_city: "",
+  from_airport: "",
+  to_airport: "",
+  departure_time: new Date(),
+  arrival_time: new Date(),
+  original_price: 0,
+  current_price: 0,
+  remain_seats: 0,
+};
 export default {
   data() {
     return {
       flightList: [],
       dialogVisible: false,
       isAddDialog: true,
-      flightRecord: {
-        flight_id: 0,
-        flight_model: "国泰航空",
-        from_city: "南京",
-        to_city: "北京",
-        from_airport: "禄口国际机场T2",
-        to_airport: "大兴国际机场",
-        departure_time: new Date(),
-        arrival_time: new Date(),
-        original_price: 1280,
-        current_price: 349,
-        remain_seats: 5,
-      },
+      flightRecord: defaultFlightRecord,
     }
   },
   components: {
     Right,
   },
   methods: {
-    handleDialogOpen(isAddDialog = true) {
+    handleDialogOpen(isAddDialog = true, flight_index = 0) {
       this.dialogVisible = true;
       this.isAddDialog = isAddDialog;
+      if (isAddDialog) {
+        this.flightRecord = defaultFlightRecord;
+      } else {
+        this.flightRecord = this.flightList[flight_index];
+      }
     },
     async handleConfirm() {
-      this.dialogVisible = false;
+      if (this.isAddDialog) {
+        const { success } = await addFlight(this.flightRecord)
+        if (success) {
+          this.dialogVisible = false;
+          this.$message({
+            type: 'success',
+            message: '添加成功'
+          })
+          this.updateAllFlight()
+        }
+      } else {
+        const { success } = await updateFlight(this.flightRecord)
+        if (success) {
+          this.dialogVisible = false;
+          this.$message({
+            type: 'success',
+            message: '更新成功'
+          })
+          this.updateAllFlight()
+        }
+      }
+    },
+    async updateAllFlight() {
+      const { success, data } = await getAllFlight();
+      if (success) {
+        this.flightList = data.map(item => ({
+          ...item,
+          departure_time: format(new Date(item.departure_time), 'yyyy-MM-dd HH:mm'),
+          arrival_time: format(new Date(item.arrival_time), 'yyyy-MM-dd HH:mm')
+        }))
+      }
     }
   },
   async mounted() {
-    const { success, data } = await getAllFlight();
-    if (success) {
-      this.flightList = data.map(item => ({
-        ...item,
-        departure_time: format(new Date(item.departure_time), 'yyyy-MM-dd HH:mm'),
-        arrival_time: format(new Date(item.arrival_time), 'yyyy-MM-dd HH:mm')
-      }))
-    }
+    this.updateAllFlight()
   }
 }
 </script>
@@ -67,8 +96,13 @@ export default {
           <template #header>
             <el-button type="danger" size="small" plain round @click="handleDialogOpen">新增记录</el-button>
           </template>
-          <template #default>
-            <el-button type="primary" size="small" round @click="() => handleDialogOpen(false)">编辑</el-button>
+          <template #default="scope">
+            <el-button
+              type="primary"
+              size="small"
+              round
+              @click="() => handleDialogOpen(false, scope.$index)"
+            >编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -128,12 +162,12 @@ export default {
               </el-icon>
             </el-col>
             <el-col :span="11">
-              <el-time-picker
+              <el-date-picker
                 v-model="flightRecord.arrival_time"
                 type="datetime"
                 placeholder="抵达时间"
                 style="width: 100%"
-              ></el-time-picker>
+              ></el-date-picker>
             </el-col>
           </el-row>
         </el-form-item>

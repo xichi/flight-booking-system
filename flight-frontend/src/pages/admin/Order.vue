@@ -1,5 +1,6 @@
 <script>
-import { ORDER_LIST_LARGE } from '@/mock'
+import { format } from 'date-fns'
+import { getAllOrder } from '@/api/common'
 export default {
   data() {
     return {
@@ -7,7 +8,21 @@ export default {
     }
   },
   async mounted() {
-    this.orderList = ORDER_LIST_LARGE;
+    const { success, data } = await getAllOrder();
+    if (success) {
+      this.orderList = data.map(item => ({
+        ...item,
+        from_city: item.flight.from_city,
+        to_city: item.flight.to_city,
+        from_airport: item.flight.from_airport,
+        to_airport: item.flight.to_airport,
+        status: item.check_status,
+        departure_time: format(new Date(item.flight.departure_time), 'yyyy-MM-dd HH:mm'),
+        arrival_time: format(new Date(item.flight.arrival_time), 'yyyy-MM-dd HH:mm'),
+        order_time: format(new Date(item.order_time), 'yyyy-MM-dd HH:mm'),
+        user_name: item.sys_user.user_name,
+      }));
+    }
   }
 }
 </script>
@@ -21,7 +36,7 @@ export default {
         <el-table-column prop="to_city" label="目的地城市" width="120" />
         <el-table-column prop="from_airport" label="出发机场" width="120" />
         <el-table-column prop="to_airport" label="目的地机场" width="120" />
-        <el-table-column prop="depature_time" label="出发时间" width="120" />
+        <el-table-column prop="departure_time" label="出发时间" width="120" />
         <el-table-column prop="arrival_time" label="抵达时间" width="120" />
         <el-table-column prop="user_name" label="用户" width="120" />
         <el-table-column prop="order_time" label="下单时间" width="120" />
