@@ -1,4 +1,4 @@
-import Sequelize from "sequelize";
+import Sequelize from "sequelize"; 
 import mysql from "../db/mysql";
 import FlightModel from "./flight";
 import UserModel from "./user";

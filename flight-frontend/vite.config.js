@@ -7,6 +7,7 @@ import path from 'path';
 
 export default ({ mode }) => {
   return defineConfig({
+    base: './',
     plugins: [
       vue(),
       AutoImport({
@@ -29,7 +30,7 @@ export default ({ mode }) => {
           rewrite: (path) => path.replace(/^\/api/, '')
         },
       }
-    }
+    },
   })
 }
 

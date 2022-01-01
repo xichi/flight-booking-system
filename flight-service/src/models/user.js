@@ -37,7 +37,7 @@ const UserModel = mysql.define('sys_user',
       allowNull: true,
     },
     telephone: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING(64),
       allowNull: true,
     },
     sex: {

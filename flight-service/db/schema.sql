@@ -22,7 +22,7 @@ CREATE TABLE sys_user (
   user_passwd varchar(128) NOT NULL,
   certification_type int,
   certification_number varchar(64),
-  telephone int,
+  telephone varchar(64),
   sex int NOT NULL DEFAULT 0,
   age int NOT NULL DEFAULT 0,
   balance int NOT NULL DEFAULT 0,

@@ -17,6 +17,10 @@
 
 1. 安装依赖：`npm run install`
 2. 启动本地前端项目：`npm run dev:fe`
+3. 启动本地Mysql：`cd flight-service && npm run init:db`
 3. 启动本地后端项目：`npm run dev:be`
 
 接口文档：http://localhost:8000/swagger
+
+
+远端运行：`pm2 start npm -- run server`

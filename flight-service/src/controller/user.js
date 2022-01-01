@@ -70,6 +70,7 @@ class UserController {
           type: 'ERROR_PASSWORD',
           message: '两次密码输入不一致'
         }
+        return;
       }
       const emailExist = await UserModel.findOne({ where: { user_email: email } });
       if (emailExist) {
@@ -108,7 +109,7 @@ class UserController {
   }
   // 更新用户信息
   async updateInfo(ctx, next) {
-    const param = ctx.request.body;
+    const param = ctx.request.body;  //获取要更新的数据
     const {
       certification_type,
       certification_number,
@@ -121,7 +122,7 @@ class UserController {
     const token = ctx.request.header.authorization.slice(7);
     const { id } = jwt.verify(token, jwtSecret);
     try {
-      const user = await UserModel.update({
+      const user = await UserModel.update({  
         certification_type,
         certification_number,
         telephone,
@@ -130,12 +131,13 @@ class UserController {
         balance,
         address
       }, { where: { user_id: id } });
-      const userInfo = await UserModel.findOne({ where: { user_id: id } })
+      const userInfo = await UserModel.findOne({ where: { user_id: id } })  
       ctx.body = {
         success: true,
         data: userInfo
       };
     } catch (err) {
+      console.log(err)
       ctx.body = {
         success: false,
         message: '更新用户信息失败'
