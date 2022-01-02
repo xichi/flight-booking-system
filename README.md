@@ -16,7 +16,7 @@
 ## How to develop locally?
 
 1. 安装依赖：`npm run install`
-2. 启动本地前端项目：`npm run dev:fe`
+2. 启动本地前端项目：`cd flight-frontend && npm run dev:fe`
 3. 启动本地Mysql：`cd flight-service && npm run init:db`
 3. 启动本地后端项目：`npm run dev:be`
 

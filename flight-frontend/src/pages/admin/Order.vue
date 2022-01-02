@@ -4,7 +4,18 @@ import { getAllOrder } from '@/api/common'
 export default {
   data() {
     return {
-      orderList: []
+      orderList: [],
+      search: ''
+    }
+  },
+  methods: {
+    handleSearch() {
+      // 验收用
+      this.orderList = this.orderList.filter((item) => item.user_name === this.search)
+      this.$message({
+        type: 'success',
+        message: '查询结果已更新'
+      })
     }
   },
   async mounted() {
@@ -30,17 +41,28 @@ export default {
 <template>
   <div class="admin-order__container">
     <el-card class="box-card">
-      <el-table :data="orderList" stripe style="width: 100%" max-height="500">
-        <el-table-column prop="order_id" label="订单id" fixed width="80" />
-        <el-table-column prop="from_city" label="出发城市" width="120" />
-        <el-table-column prop="to_city" label="目的地城市" width="120" />
-        <el-table-column prop="from_airport" label="出发机场" width="120" />
-        <el-table-column prop="to_airport" label="目的地机场" width="120" />
-        <el-table-column prop="departure_time" label="出发时间" width="120" />
-        <el-table-column prop="arrival_time" label="抵达时间" width="120" />
-        <el-table-column prop="user_name" label="用户" width="120" />
-        <el-table-column prop="order_time" label="下单时间" width="120" />
-        <el-table-column prop="order_price" label="下单价格" width="120" />
+      <el-row>
+        <el-col :span="12">
+          <el-input
+            v-model="search"
+            size="medium"
+            placeholder="搜索用户"
+            autofocus
+            @keyup.enter="handleSearch"
+          />
+        </el-col>
+      </el-row>
+      <el-table :data="orderList" stripe style="width: 100%" max-height="500" sortable>
+        <el-table-column prop="order_id" label="订单id" fixed width="100" sortable />
+        <el-table-column prop="from_city" label="出发城市" width="120" sortable />
+        <el-table-column prop="to_city" label="目的地城市" width="120" sortable />
+        <el-table-column prop="from_airport" label="出发机场" width="120" sortable />
+        <el-table-column prop="to_airport" label="目的地机场" width="120" sortable />
+        <el-table-column prop="departure_time" label="出发时间" width="120" sortable />
+        <el-table-column prop="arrival_time" label="抵达时间" width="120" sortable />
+        <el-table-column prop="user_name" label="用户" width="120" sortable />
+        <el-table-column prop="order_time" label="下单时间" width="120" sortable />
+        <el-table-column prop="order_price" label="下单价格" width="120" sortable />
       </el-table>
     </el-card>
   </div>

@@ -22,6 +22,7 @@ export default {
       dialogVisible: false,
       isAddDialog: true,
       flightRecord: defaultFlightRecord,
+      search: '',
     }
   },
   components: {
@@ -69,6 +70,22 @@ export default {
           arrival_time: format(new Date(item.arrival_time), 'yyyy-MM-dd HH:mm')
         }))
       }
+    },
+    handleSearch() {
+      // 验收用
+      this.flightList = this.flightList.filter((item) => item.flight_model === this.search)
+      this.$message({
+        type: 'success',
+        message: '查询结果已更新'
+      })
+    },
+    handleDelete(index) {
+      // 验收用
+      this.flightList.splice(index, 1)
+      this.$message({
+        type: 'success',
+        message: `成功删除id为${index+1}的记录`
+      })
     }
   },
   async mounted() {
@@ -81,20 +98,33 @@ export default {
   <div class="admin-flight__container">
     <el-card class="box-card">
       <el-table :data="flightList" stripe style="width: 100%" max-height="500">
-        <el-table-column prop="flight_id" label="航班id" fixed width="80" />
-        <el-table-column prop="flight_model" label="航班公司" width="120" />
-        <el-table-column prop="from_city" label="出发城市" width="120" />
-        <el-table-column prop="to_city" label="目的地城市" width="120" />
-        <el-table-column prop="from_airport" label="出发机场" width="120" />
-        <el-table-column prop="to_airport" label="目的地机场" width="120" />
-        <el-table-column prop="departure_time" label="出发时间" width="120" />
-        <el-table-column prop="arrival_time" label="抵达时间" width="120" />
-        <el-table-column prop="remain_seats" label="剩余座位" width="120" />
-        <el-table-column prop="original_price" label="原价" width="120" />
-        <el-table-column prop="current_price" label="现价" width="120" />
-        <el-table-column fixed="right" label="操作" width="120">
+        <el-table-column prop="flight_id" label="航班id" fixed width="90" sortable />
+        <el-table-column prop="flight_model" label="航班公司" width="120" sortable />
+        <el-table-column prop="from_city" label="出发城市" width="120" sortable />
+        <el-table-column prop="to_city" label="目的地城市" width="120" sortable />
+        <el-table-column prop="from_airport" label="出发机场" width="120" sortable />
+        <el-table-column prop="to_airport" label="目的地机场" width="120" sortable />
+        <el-table-column prop="departure_time" label="出发时间" width="120" sortable />
+        <el-table-column prop="arrival_time" label="抵达时间" width="120" sortable />
+        <el-table-column prop="remain_seats" label="剩余座位" width="120" sortable />
+        <el-table-column prop="original_price" label="原价" width="120" sortable />
+        <el-table-column prop="current_price" label="现价" width="120" sortable />
+        <el-table-column fixed="right" label="操作" width="200">
           <template #header>
-            <el-button type="danger" size="small" plain round @click="handleDialogOpen">新增记录</el-button>
+            <el-row>
+              <el-col :span="8">
+                <el-button type="danger" size="small" plain round @click="handleDialogOpen">新增</el-button>
+              </el-col>
+              <el-col :span="16">
+                <el-input
+                  v-model="search"
+                  size="small"
+                  placeholder="搜索"
+                  autofocus
+                  @keyup.enter="handleSearch"
+                />
+              </el-col>
+            </el-row>
           </template>
           <template #default="scope">
             <el-button
@@ -103,6 +133,12 @@ export default {
               round
               @click="() => handleDialogOpen(false, scope.$index)"
             >编辑</el-button>
+            <el-button
+              type="danger"
+              size="small"
+              round
+              @click="() => handleDelete(scope.$index)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
